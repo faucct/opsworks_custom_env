@@ -1,7 +1,7 @@
 name "opsworks_custom_env"
 maintainer "Artsy"
 description "Writes a config/application.yml file with custom ENV values to apps' deploy directories."
-version "0.3.1"
+version "0.3.2"
 
 recipe "opsworks_custom_env::configure", "Write custom configuration and notify rails application to restart upon changes."
 recipe "opsworks_custom_env::restart_command", "Helper recipe that defines command to restart rails application."
