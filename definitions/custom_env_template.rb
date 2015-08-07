@@ -4,6 +4,7 @@
 #   env (hash of custom environment settings)
 # 
 # Notifies a "restart Rails app <name> for custom env" resource.
+require 'yaml'
 
 define :custom_env_template do
   
@@ -14,12 +15,11 @@ define :custom_env_template do
     recursive true
   end
   
-  template "#{params[:deploy][:deploy_to]}/shared/config/application.yml" do
-    source "application.yml.erb"
+  file "#{params[:deploy][:deploy_to]}/shared/config/application.yml" do
+    content YAML.dump params[:env]
     owner params[:deploy][:user]
     group params[:deploy][:group]
     mode "0660"
-    variables :env => params[:env]
     notifies :run, resources(:execute => "restart Rails app #{params[:application]} for custom env")
   end
   
