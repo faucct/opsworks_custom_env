@@ -20,7 +20,10 @@ define :custom_env_template do
     owner params[:deploy][:user]
     group params[:deploy][:group]
     mode "0660"
-    notifies :run, resources(:execute => "restart Rails app #{params[:application]} for custom env")
+    begin
+      notifies :run, resources(:execute => "restart Rails app #{params[:application]} for custom env")
+    rescue Chef::Exceptions::ResourceNotFound
+    end
   end
   
 end
