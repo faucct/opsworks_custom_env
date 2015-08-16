@@ -8,14 +8,21 @@ require 'yaml'
 
 define :custom_env_template do
   
-  directory "#{params[:deploy][:deploy_to]}/shared/config" do
+  path = "#{params[:deploy][:deploy_to]}/shared/config"
+  
+  directory path do
     owner params[:deploy][:user]
     group params[:deploy][:group]
     mode "0660"
     recursive true
   end
   
-  file "#{params[:deploy][:deploy_to]}/shared/config/application.yml" do
+  execute 'chmod deploy_to directory' do
+    command "chown -Rf #{params[:deploy][:user]} . && chmod -Rf 0660 ."
+    cwd params[:deploy][:deploy_to]
+  end
+  
+  file "#{path}/application.yml" do
     content YAML.dump params[:env]
     owner params[:deploy][:user]
     group params[:deploy][:group]
